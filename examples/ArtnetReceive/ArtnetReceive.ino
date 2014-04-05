@@ -4,6 +4,8 @@
 #include <SPI.h>
 #include <mac.h>
 
+Artnet artnet;
+
 char packetBuffer[MAX_BUFFER_ARTNET];
 
 byte ip[] = {192, 168, 2, 2};
@@ -11,16 +13,16 @@ unsigned int port = 6454;
 
 void setup()
 {
-	Serial.begin(115200);
-	read_mac();
-	artnetInit(mac, ip, port);
+  Serial.begin(115200);
+  read_mac();
+  artnet.begin(mac, ip, port);
 }
 
 void loop()
 {
-	if (artnetReadPacket(packetBuffer) == ART_DMX)
-	{
-		printPacketHeader();
-	}
-	
+  if (artnet.read(packetBuffer) == ART_DMX)
+  {
+      artnet.printPacketHeader();
+  }
+    
 }

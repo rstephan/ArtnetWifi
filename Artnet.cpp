@@ -1,21 +1,14 @@
 #include <Artnet.h>
 
-int packetSize;
-int opcode;
-char packetID[8] = "Art-Net"; // ID of the packet, should be "Art-Net" else ignore
-byte sequence;
-int incomingUniverse;
-int dmxDataLength;
+Artnet::Artnet() {}
 
-EthernetUDP Udp;
- 
-void artnetInit(byte mac[], byte ip[], unsigned int port)
+void Artnet::begin(byte mac[], byte ip[], unsigned int port)
 {
   Ethernet.begin(mac,ip);
   Udp.begin(port);
 }
 
-int artnetReadPacket(char packetBuffer[])
+int Artnet::read(char packetBuffer[])
 {
   packetSize = Udp.parsePacket();
   
@@ -24,9 +17,9 @@ int artnetReadPacket(char packetBuffer[])
       Udp.read(packetBuffer, MAX_BUFFER_ARTNET);
 
       // Check that packetID is "Art-Net" else ignore
-      for (byte i = 0 ; i < 8 ; i++)
+      for (byte i = 0 ; i < 9 ; i++)
       {
-        if (packetBuffer[i] != packetID[i])
+        if (packetBuffer[i] != ART_NET_ID[i])
           return 0;
       }
         
@@ -46,7 +39,8 @@ int artnetReadPacket(char packetBuffer[])
   }
 }
 
-void printPacketHeader()
+
+void Artnet::printPacketHeader()
 {
   Serial.print("packet size = ");
   Serial.print(packetSize);
@@ -61,7 +55,7 @@ void printPacketHeader()
 
 }
 
-void printPacketContent(char packetBuffer[])
+void Artnet::printPacketContent(char packetBuffer[])
 {
   for (int i = 18 ; i < dmxDataLength ; i++){
     Serial.print(packetBuffer[i], DEC);

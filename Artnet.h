@@ -1,3 +1,6 @@
+#ifndef ARTNET_H
+#define ARTNET_H
+
 #include <Arduino.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
@@ -5,8 +8,28 @@
 #define ART_POLL 0x2000
 #define ART_DMX 0x5000
 #define MAX_BUFFER_ARTNET 530
+#define ART_DMX_START 18
+#define ART_NET_ID "Art-Net\0"
 
-void artnetInit(byte mac[], byte ip[], unsigned int port);
-int artnetReadPacket(char packetBuffer[]);
-void printPacketHeader();
-void printPacketContent(char packetBuffer[]);
+
+class Artnet
+{
+public:
+  Artnet();
+
+  void begin(byte mac[], byte ip[], unsigned int port);
+  int read(char packetBuffer[]);
+  void printPacketHeader();
+  void printPacketContent(char packetBuffer[]);
+
+
+private:
+  EthernetUDP Udp;
+  int packetSize;
+  int opcode;
+  byte sequence;
+  int incomingUniverse;
+  int dmxDataLength;
+};
+
+#endif
