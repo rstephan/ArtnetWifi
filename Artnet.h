@@ -17,11 +17,10 @@ class Artnet
 public:
   Artnet();
 
-  void begin(byte mac[], byte ip[], unsigned int port);
-  int read(char packetBuffer[]);
+  void begin(byte mac[], byte ip[], unsigned int port, char* packetBuffer);
+  int read();
   void printPacketHeader();
-  void printPacketContent(char packetBuffer[]);
-
+  void printPacketContent();
 
 private:
   EthernetUDP Udp;
@@ -30,6 +29,7 @@ private:
   byte sequence;
   int incomingUniverse;
   int dmxDataLength;
+  char *_packetBuffer;
 };
 
 #endif

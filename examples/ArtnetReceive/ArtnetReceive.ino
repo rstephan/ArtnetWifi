@@ -15,14 +15,15 @@ void setup()
 {
   Serial.begin(115200);
   read_mac();
-  artnet.begin(mac, ip, port);
+  artnet.begin(mac, ip, port, packetBuffer);
 }
 
 void loop()
 {
-  if (artnet.read(packetBuffer) == ART_DMX)
+  if (artnet.read() == ART_DMX)
   {
       artnet.printPacketHeader();
+      artnet.printPacketContent();
   }
     
 }
