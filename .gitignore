@@ -19,3 +19,9 @@
 *.exe
 *.out
 *.app
+
+# Osx
+.DS_Store
+
+# Sublime
+*.sublime-workspace
