@@ -10,6 +10,7 @@
 #define MAX_BUFFER_ARTNET 530
 #define ART_DMX_START 18
 #define ART_NET_ID "Art-Net\0"
+#define ART_NET_PORT 6454
 
 
 class Artnet
@@ -17,7 +18,7 @@ class Artnet
 public:
   Artnet();
 
-  void begin(byte mac[], byte ip[], unsigned int port, char* packetBuffer);
+  void begin(byte mac[], byte ip[], char* packetBuffer);
   int read();
   void printPacketHeader();
   void printPacketContent();

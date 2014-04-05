@@ -2,10 +2,10 @@
 
 Artnet::Artnet() {}
 
-void Artnet::begin(byte mac[], byte ip[], unsigned int port, char* packetBuffer)
+void Artnet::begin(byte mac[], byte ip[], char* packetBuffer)
 {
   Ethernet.begin(mac,ip);
-  Udp.begin(port);
+  Udp.begin(ART_NET_PORT);
   _packetBuffer = packetBuffer;
 }
 
