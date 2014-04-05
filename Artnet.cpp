@@ -19,47 +19,31 @@ int artnetReadPacket(char packetBuffer[])
 {
   packetSize = Udp.parsePacket();
   
-  if (packetSize)
+  if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
   { 
       Udp.read(packetBuffer, MAX_BUFFER_ARTNET);
-      if (parseArtnet(packetBuffer, packetSize) == ART_DMX)
-        Serial.println("Got ARTDMX");
-      if (parseArtnet(packetBuffer, packetSize) == ART_POLL)
-        Serial.println("Got ARTPOLL");
-      if (parseArtnet(packetBuffer, packetSize) == 0)
-        return 0;
-      
-      return 1;
+
+      // Check that packetID is "Art-Net" else ignore
+      for (byte i = 0 ; i < 8 ; i++)
+      {
+        if (packetBuffer[i] != packetID[i])
+          return 0;
+      }
+        
+      opcode = packetBuffer[8] | packetBuffer[9] << 8; 
+      sequence = packetBuffer[12];
+      incomingUniverse = packetBuffer[14] | packetBuffer[15] << 8;  
+      dmxDataLength = packetBuffer[17] | packetBuffer[16] << 8;
+
+      if (opcode == ART_DMX)
+        return ART_DMX;
+      if (opcode == ART_POLL)
+        return ART_POLL; 
   }
   else
   {
     return 0;
   }
-}
-
-int parseArtnet(char packetBuffer[], int _packetSize)
-{
-  packetSize = _packetSize;
-
-  // Check that packetID is "Art-Net" else ignore
-  for (byte i = 0 ; i < 8 ; i++)
-  {
-    if (packetBuffer[i] != packetID[i])
-      return 0;
-  }
-    
-    
-
-  opcode = packetBuffer[8] | packetBuffer[9] << 8; 
-  sequence = packetBuffer[12];
-  incomingUniverse = packetBuffer[14] | packetBuffer[15] << 8;  
-  dmxDataLength = packetBuffer[17] | packetBuffer[16] << 8;
-
-  if (opcode == ART_DMX)
-    return ART_DMX;
-  if (opcode == ART_POLL)
-    return ART_POLL;
-
 }
 
 void printPacketHeader()

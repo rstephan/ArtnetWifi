@@ -18,7 +18,7 @@ void setup()
 
 void loop()
 {
-	if (artnetReadPacket(packetBuffer))
+	if (artnetReadPacket(packetBuffer) == ART_DMX)
 	{
 		printPacketHeader();
 	}
