@@ -20,8 +20,6 @@ void loop()
   {
       artnet.printPacketHeader();
       artnet.printPacketContent();
-      uint8_t* data = artnet.getArtnetPacket();
-      Serial.println(data[19]);
   }
     
 }

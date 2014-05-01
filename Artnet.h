@@ -26,9 +26,9 @@ public:
   void printPacketHeader();
   void printPacketContent();
 
-  inline uint8_t* getArtnetPacket(void)
+  inline uint8_t* getArtDmxData(void)
   {
-    return artnetPacket;
+    return artnetPacket + ART_DMX_START;
   }
 
 private:
