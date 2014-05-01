@@ -21,19 +21,25 @@ class Artnet
 public:
   Artnet();
 
-  void begin(byte mac[], byte ip[], char* packetBuffer);
-  int read();
+  void begin(byte mac[], byte ip[]);
+  uint16_t read();
   void printPacketHeader();
   void printPacketContent();
 
+  inline uint8_t* getArtnetPacket(void)
+  {
+    return artnetPacket;
+  }
+
 private:
   EthernetUDP Udp;
-  int packetSize;
-  int opcode;
-  byte sequence;
-  int incomingUniverse;
-  int dmxDataLength;
-  char *_packetBuffer;
+  
+  uint8_t artnetPacket[MAX_BUFFER_ARTNET];
+  uint16_t packetSize;
+  uint16_t opcode;
+  uint8_t sequence;
+  uint16_t incomingUniverse;
+  uint16_t dmxDataLength;
 };
 
 #endif
