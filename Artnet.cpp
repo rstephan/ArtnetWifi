@@ -29,9 +29,14 @@ uint16_t Artnet::read()
       dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
 
       if (opcode == ART_DMX)
+      {
+        if (artDmxCallback) (*artDmxCallback)(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
         return ART_DMX;
+      }
       if (opcode == ART_POLL)
+      {
         return ART_POLL; 
+      }
   }
   else
   {

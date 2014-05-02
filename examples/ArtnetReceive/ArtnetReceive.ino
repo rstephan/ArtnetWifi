@@ -19,9 +19,21 @@ void loop()
 {
   if (artnet.read() == ART_DMX)
   {
-      artnet.printPacketHeader();
-      artnet.printPacketContent();
-      Serial.println(artnet.getOpcode(), HEX);
+    // print out our data
+    Serial.print("universe number = ");
+    Serial.print(artnet.getUniverse());
+    Serial.print("\tdata length = ");
+    Serial.print(artnet.getLength());
+    Serial.print("\tsequence n0. = ");
+    Serial.println(artnet.getSequence());
+    Serial.print("DMX data: ");
+    for (int i = 0 ; i < artnet.getLength() ; i++)
+    {
+      Serial.print(artnet.getDmxFrame()[i]);
+      Serial.print("  ");
+    }
+    Serial.println();
+    Serial.println();
   }
-    
 }
+

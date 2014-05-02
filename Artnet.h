@@ -52,6 +52,11 @@ public:
     return dmxDataLength;
   } 
 
+  inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)) 
+  {
+    artDmxCallback = fptr;
+  }
+
 private:
   EthernetUDP Udp;
   
@@ -61,6 +66,7 @@ private:
   uint8_t sequence;
   uint16_t incomingUniverse;
   uint16_t dmxDataLength;
+  void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
 };
 
 #endif
