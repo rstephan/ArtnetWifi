@@ -24,12 +24,13 @@ uint16_t Artnet::read()
       }
         
       opcode = artnetPacket[8] | artnetPacket[9] << 8; 
-      sequence = artnetPacket[12];
-      incomingUniverse = artnetPacket[14] | artnetPacket[15] << 8;  
-      dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
 
       if (opcode == ART_DMX)
       {
+        sequence = artnetPacket[12];
+        incomingUniverse = artnetPacket[14] | artnetPacket[15] << 8;  
+        dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
+
         if (artDmxCallback) (*artDmxCallback)(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
         return ART_DMX;
       }
@@ -56,7 +57,6 @@ void Artnet::printPacketHeader()
   Serial.print(dmxDataLength);
   Serial.print("\tsequence n0. = ");
   Serial.println(sequence);
-
 }
 
 void Artnet::printPacketContent()
