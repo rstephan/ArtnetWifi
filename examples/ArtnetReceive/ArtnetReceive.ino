@@ -5,6 +5,7 @@
 
 Artnet artnet;
 
+// Change ip and mac address for your setup
 byte ip[] = {192, 168, 2, 2};
 byte mac[] = {0x04, 0xE9, 0xE5, 0x00, 0x69, 0xEC};
 
@@ -20,6 +21,7 @@ void loop()
   {
       artnet.printPacketHeader();
       artnet.printPacketContent();
+      Serial.println(artnet.getOpcode(), HEX);
   }
     
 }

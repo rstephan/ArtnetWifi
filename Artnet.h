@@ -26,10 +26,31 @@ public:
   void printPacketHeader();
   void printPacketContent();
 
-  inline uint8_t* getArtDmxData(void)
+  // Return a pointer to the start of the DMX data
+  inline uint8_t* getDmxFrame(void)
   {
     return artnetPacket + ART_DMX_START;
   }
+
+  inline uint16_t getOpcode(void)
+  {
+    return opcode;
+  }
+
+  inline uint8_t getSequence(void)
+  {
+    return sequence;
+  }
+
+  inline uint16_t getUniverse(void)
+  {
+    return incomingUniverse;
+  }
+
+  inline uint16_t getLength(void)
+  {
+    return dmxDataLength;
+  } 
 
 private:
   EthernetUDP Udp;
