@@ -16,6 +16,10 @@ Different examples are provided, here is a summary of what each example does.
 
 This example will receive multiple universes via Artnet and control a strip of ws2811 leds via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
+### ArtnetNeoPixelSD
+
+Same as above but with controls to record and playback sequences from an SD card. To record, send 255 to the first channel of universe 14. To stop, send 0 and to playback send 127.  I've noticed slowdowns above 100 leds.
+
 ### ArtnetOctoWS2811
 
 This example will receive multiple universes via Artnet and control a strip of ws2811 leds via Paul Stoffregen's excellent [OctoWS2811 library](https://www.pjrc.com/teensy/td_libs_OctoWS2811.html).
