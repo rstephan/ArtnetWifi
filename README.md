@@ -4,8 +4,6 @@ An Art-Net library for Teensy and Arduino
 
 Note: this library assumes you are using the standard Ethernet library
 
-Many thanks to virtualdave and [mortonkopf](http://orchardelica.com/wp/artnet-multiple-universe-with-teensy-3-and-octows2811) on the pjrc [forums](http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811?highlight=artnet) for the original sketches !
-
 ## Installation
 
 You can download the [master](https://github.com/natcl/Artnet/archive/master.zip) and place the folder in your `~/Documents/Arduino/libraries` folder.
@@ -25,3 +23,7 @@ This is a basic example that will print out the header and the content of an Art
 ### ArtnetReceiveCallback
 
 This is similar to ArtnetReceive but uses a callback to read the data.
+
+## Acknowledgements
+
+Many thanks to virtualdave and [mortonkopf](http://orchardelica.com/wp/artnet-multiple-universe-with-teensy-3-and-octows2811) on the pjrc [forums](http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811?highlight=artnet) for the original sketches !
