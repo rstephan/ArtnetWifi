@@ -12,9 +12,13 @@ You can download the [master](https://github.com/natcl/Artnet/archive/master.zip
 
 Different examples are provided, here is a summary of what each example does.
 
-### ArtnetNeopixel
+### ArtnetNeoPixel
 
 This example will receive multiple universes via Artnet and control a strip of ws2811 leds via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
+
+### ArtnetOctoWS2811
+
+This example will receive multiple universes via Artnet and control a strip of ws2811 leds via Paul Stoffregen's excellent [OctoWS2811 library](https://www.pjrc.com/teensy/td_libs_OctoWS2811.html).
 
 ### ArtnetReceive
 
