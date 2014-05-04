@@ -2,12 +2,15 @@
 #include <Ethernet.h>
 #include <EthernetUdp.h>
 #include <SPI.h>
-#include <Adafruit_NeoPixel.h>
+#include <OctoWS2811.h>
 
-// Neopixel settings
+// OctoWS2811 settings
 const int ledsPerStrip = 492; // change for your setup
-const byte dataPin = 2;
-Adafruit_NeoPixel leds = Adafruit_NeoPixel(ledsPerStrip, dataPin, NEO_GRB + NEO_KHZ800);
+const byte numStrips= 1; // change for your setup
+DMAMEM int displayMemory[ledsPerStrip*6];
+int drawingMemory[ledsPerStrip*6];
+const int config = WS2811_GRB | WS2811_800kHz;
+OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 
 // Artnet settings
 Artnet artnet;
@@ -44,11 +47,6 @@ void loop()
 void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
 {
   sendFrame = 1;
-  // set brightness of the whole strip 
-  if (universe == 15)
-  {
-    leds.setBrightness(data[0]);
-  }
 
   // Store which universe has got in
   if (universe < maxUniverses)
@@ -75,7 +73,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   // send to leds
   for (int i = 0; i < ledsPerStrip; i++)
   {
-    leds.setPixelColor(i, channelBuffer[(i) * 3], channelBuffer[(i * 3) + 1], channelBuffer[(i * 3) + 2]);
+    leds.setPixel(i, channelBuffer[(i) * 3], channelBuffer[(i * 3) + 1], channelBuffer[(i * 3) + 2]);
   }      
   
   if (sendFrame)
@@ -89,18 +87,18 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 void initTest()
 {
   for (int i = 0 ; i < ledsPerStrip ; i++)
-    leds.setPixelColor(i, 127, 0, 0);
+    leds.setPixel(i, 127, 0, 0);
   leds.show();
   delay(500);
   for (int i = 0 ; i < ledsPerStrip ; i++)
-    leds.setPixelColor(i, 0, 127, 0);
+    leds.setPixel(i, 0, 127, 0);
   leds.show();
   delay(500);
   for (int i = 0 ; i < ledsPerStrip ; i++)
-    leds.setPixelColor(i, 0, 0, 127);
+    leds.setPixel(i, 0, 0, 127);
   leds.show();
   delay(500);
   for (int i = 0 ; i < ledsPerStrip ; i++)
-    leds.setPixelColor(i, 0, 0, 0);
+    leds.setPixel(i, 0, 0, 0);
   leds.show();
 }
