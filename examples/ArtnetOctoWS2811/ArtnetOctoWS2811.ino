@@ -15,7 +15,7 @@ OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 // Artnet settings
 Artnet artnet;
 const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as zero.
-const int numberOfChannels = ledsPerStrip * 3; // Total number of channels you want to receive (1 led = 3 channels)
+const int numberOfChannels = ledsPerStrip * numStrips * 3; // Total number of channels you want to receive (1 led = 3 channels)
 byte channelBuffer[numberOfChannels]; // Combined universes into a single array
 
 // Check if we got all universes
@@ -71,7 +71,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   }      
 
   // send to leds
-  for (int i = 0; i < ledsPerStrip; i++)
+  for (int i = 0; i < ledsPerStrip * numStrips; i++)
   {
     leds.setPixel(i, channelBuffer[(i) * 3], channelBuffer[(i * 3) + 1], channelBuffer[(i * 3) + 2]);
   }      
@@ -86,19 +86,19 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 
 void initTest()
 {
-  for (int i = 0 ; i < ledsPerStrip ; i++)
+  for (int i = 0 ; i < ledsPerStrip * numStrips ; i++)
     leds.setPixel(i, 127, 0, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip ; i++)
+  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
     leds.setPixel(i, 0, 127, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip ; i++)
+  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
     leds.setPixel(i, 0, 0, 127);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip ; i++)
+  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
     leds.setPixel(i, 0, 0, 0);
   leds.show();
 }
