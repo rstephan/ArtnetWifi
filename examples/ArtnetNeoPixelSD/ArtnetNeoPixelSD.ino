@@ -91,6 +91,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
       }
       datafile = SD.open(fileName, FILE_WRITE);
       record = 1;
+      playback = 0;
     }
     // play
     if (data[0] == 127)
