@@ -16,7 +16,7 @@ const int numberOfChannels = ledsPerStrip * 3; // Total number of channels you w
 byte channelBuffer[numberOfChannels]; // Combined universes into a single array
 
 // Check if we got all universes
-const int maxUniverses = ceil(numberOfChannels / 512.);
+const int maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
 bool universesReceived[maxUniverses];
 bool sendFrame = 1;
 
