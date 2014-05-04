@@ -6,7 +6,7 @@
 #include <SD.h>
 
 // Neopixel settings
-const int ledsPerStrip = 100; // change for your setup
+const int ledsPerStrip = 200; // change for your setup
 const byte dataPin = 2;
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(ledsPerStrip, dataPin, NEO_GRB + NEO_KHZ800);
 
@@ -63,7 +63,7 @@ void loop()
         leds.setPixelColor(i, channelBuffer[(i) * 3], channelBuffer[(i * 3) + 1], channelBuffer[(i * 3) + 2]);
       
       leds.show();
-      delay(22);
+      delay(20);
     }
     playback = 0;
     datafile.close();
@@ -122,17 +122,21 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
     }
   }
 
-  // read universe and put into the right part of the display buffer
-  for (int i = 0 ; i < length ; i++)
+  if (!playback)
   {
-    int bufferIndex = i + ((universe - startUniverse) * length);
-    if (bufferIndex < numberOfChannels) // to verify
-      channelBuffer[bufferIndex] = byte(data[i]);
+    // read universe and put into the right part of the display buffer
+    for (int i = 0 ; i < length ; i++)
+    {
+      int bufferIndex = i + ((universe - startUniverse) * length);
+      if (bufferIndex < numberOfChannels) // to verify
+        channelBuffer[bufferIndex] = byte(data[i]);
+    }
   }
 
-  if (record)
+  if (record && sendFrame)
   {
     datafile.write(channelBuffer, numberOfChannels);
+    memset(universesReceived, 0, maxUniverses);
   } 
 
   if (!playback && !record)
