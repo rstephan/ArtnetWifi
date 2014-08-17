@@ -58,7 +58,7 @@ void loop()
     while(datafile.available() && playback)
     {
       artnet.read();
-      datafile.readBytes(channelBuffer, numberOfChannels);
+      datafile.read(channelBuffer, numberOfChannels);
       for (int i = 0; i < ledsPerStrip; i++)
         leds.setPixelColor(i, channelBuffer[(i) * 3], channelBuffer[(i * 3) + 1], channelBuffer[(i * 3) + 2]);
       
