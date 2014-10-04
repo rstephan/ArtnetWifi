@@ -1,3 +1,9 @@
+/*
+This example will receive multiple universes via Artnet and control a strip of ws2811 leds via 
+Paul Stoffregen's excellent OctoWS2811 library: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
+This example may be copied under the terms of the MIT license, see the LICENSE file for details
+*/
+
 #include <Artnet.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>

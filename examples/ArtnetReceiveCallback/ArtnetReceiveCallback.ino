@@ -1,3 +1,8 @@
+/*
+This is similar to ArtnetReceive but uses a callback to read the data.
+This example may be copied under the terms of the MIT license, see the LICENSE file for details
+*/
+
 #include <Artnet.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
