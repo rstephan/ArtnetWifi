@@ -13,6 +13,8 @@ This example may be copied under the terms of the MIT license, see the LICENSE f
 // OctoWS2811 settings
 const int ledsPerStrip = 240; // change for your setup
 const byte numStrips= 2; // change for your setup
+const int numLeds = ledsPerStrip * numStrips;
+const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
 DMAMEM int displayMemory[ledsPerStrip*6];
 int drawingMemory[ledsPerStrip*6];
 const int config = WS2811_GRB | WS2811_800kHz;
@@ -21,8 +23,6 @@ OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
 // Artnet settings
 Artnet artnet;
 const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as 0.
-const int numLeds = ledsPerStrip * numStrips;
-const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
 
 // Check if we got all universes
 const int maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
@@ -87,19 +87,19 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 
 void initTest()
 {
-  for (int i = 0 ; i < ledsPerStrip * numStrips ; i++)
+  for (int i = 0 ; i < numLeds ; i++)
     leds.setPixel(i, 127, 0, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
+  for (int i = 0 ; i < numLeds  ; i++)
     leds.setPixel(i, 0, 127, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
+  for (int i = 0 ; i < numLeds  ; i++)
     leds.setPixel(i, 0, 0, 127);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < ledsPerStrip * numStrips  ; i++)
+  for (int i = 0 ; i < numLeds  ; i++)
     leds.setPixel(i, 0, 0, 0);
   leds.show();
 }
