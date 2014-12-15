@@ -12,13 +12,13 @@ This example may be copied under the terms of the MIT license, see the LICENSE f
 
 // Neopixel settings
 const int numLeds = 240; // change for your setup
+const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
 const byte dataPin = 2;
 Adafruit_NeoPixel leds = Adafruit_NeoPixel(numLeds, dataPin, NEO_GRB + NEO_KHZ800);
 
 // Artnet settings
 Artnet artnet;
 const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as 0.
-const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
 
 // Check if we got all universes
 const int maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
