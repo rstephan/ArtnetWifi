@@ -75,7 +75,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   for (int i = 0; i < length / 3; i++)
   {
     int led = i + (universe - startUniverse) * (previousDataLength / 3);
-    //if (led < numLeds)
+    if (led < numLeds)
       leds.setPixelColor(led, data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
   }
   previousDataLength = length;     
