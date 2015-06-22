@@ -56,8 +56,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   sendFrame = 1;
 
   // Store which universe has got in
-  if (universe < maxUniverses)
-    universesReceived[universe] = 1;
+  if ((universe - startUniverse) < maxUniverses)
+    universesReceived[universe - startUniverse] = 1;
 
   for (int i = 0 ; i < maxUniverses ; i++)
   {
