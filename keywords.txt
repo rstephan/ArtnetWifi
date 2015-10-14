@@ -1,0 +1,16 @@
+# Datatypes
+
+Artnet	KEYWORD1
+
+# Methods
+
+begin	KEYWORD2
+read	KEYWORD2
+printPacketHeader	KEYWORD2
+printPacketContent	KEYWORD2
+getDmxFrame	KEYWORD2
+getOpcode	KEYWORD2
+getSequence	KEYWORD2
+getUniverse	KEYWORD2
+getLength	KEYWORD2
+setArtDmxCallback	KEYWORD2
