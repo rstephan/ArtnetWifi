@@ -65,10 +65,10 @@ void loop()
   uint8_t i;
   uint8_t j;
   
-  // set the first 3 byte to all the same value. A RGB lamp will show a ramp-up white. 
+  // set the first 3 byte to all the same value. A RGB lamp will show a ramp-up white.
   for (j = 0; j < 255; j++) {
     for (i = 0; i < 3; i++) {
-	  artnet.setByte(i, j);
+      artnet.setByte(i, j);
     }
     // send out the Art-Net DMX data
     artnet.write();
