@@ -1,6 +1,6 @@
 # Datatypes
 
-Artnet	KEYWORD1
+ArtnetWifi	KEYWORD1
 
 # Methods
 

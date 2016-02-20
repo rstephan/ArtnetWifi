@@ -3,6 +3,9 @@
 Copyright (c) 2014 Nathanaël Lécaudé
 https://github.com/natcl/Artnet, http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811
 
+Copyright (c) 2016 Stephan Ruloff
+https://github.com/rstephan
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -22,17 +25,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <Artnet.h>
+#include <ArtnetWifi.h>
 
-Artnet::Artnet() {}
+ArtnetWifi::ArtnetWifi() {}
 
-void Artnet::begin(byte mac[], byte ip[])
+void ArtnetWifi::begin(void)
 {
-  Ethernet.begin(mac,ip);
   Udp.begin(ART_NET_PORT);
 }
 
-uint16_t Artnet::read()
+uint16_t ArtnetWifi::read(void)
 {
   packetSize = Udp.parsePacket();
   
@@ -69,7 +71,7 @@ uint16_t Artnet::read()
   }
 }
 
-void Artnet::printPacketHeader()
+void ArtnetWifi::printPacketHeader(void)
 {
   Serial.print("packet size = ");
   Serial.print(packetSize);
@@ -83,7 +85,7 @@ void Artnet::printPacketHeader()
   Serial.println(sequence);
 }
 
-void Artnet::printPacketContent()
+void ArtnetWifi::printPacketContent(void)
 {
   for (uint16_t i = ART_DMX_START ; i < dmxDataLength ; i++){
     Serial.print(artnetPacket[i], DEC);

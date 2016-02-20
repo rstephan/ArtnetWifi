@@ -3,6 +3,9 @@
 Copyright (c) 2014 Nathanaël Lécaudé
 https://github.com/natcl/Artnet, http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811
 
+Copyright (c) 2016 Stephan Ruloff
+https://github.com/rstephan
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -22,12 +25,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef ARTNET_H
-#define ARTNET_H
+#ifndef ARTNET_WIFI_H
+#define ARTNET_WIFI_H
 
 #include <Arduino.h>
-#include <Ethernet.h>
-#include <EthernetUdp.h>
+#include <WiFiUDP.h>
 
 // UDP specific
 #define ART_NET_PORT 6454
@@ -40,15 +42,15 @@ THE SOFTWARE.
 #define ART_NET_ID "Art-Net\0"
 #define ART_DMX_START 18
 
-class Artnet
+class ArtnetWifi
 {
 public:
-  Artnet();
+  ArtnetWifi();
 
-  void begin(byte mac[], byte ip[]);
-  uint16_t read();
-  void printPacketHeader();
-  void printPacketContent();
+  void begin(void);
+  uint16_t read(void);
+  void printPacketHeader(void);
+  void printPacketContent(void);
 
   // Return a pointer to the start of the DMX data
   inline uint8_t* getDmxFrame(void)
@@ -82,7 +84,7 @@ public:
   }
 
 private:
-  EthernetUDP Udp;
+  WiFiUDP Udp;
   
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
   uint16_t packetSize;
