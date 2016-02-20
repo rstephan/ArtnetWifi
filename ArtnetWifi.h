@@ -47,8 +47,11 @@ class ArtnetWifi
 public:
   ArtnetWifi();
 
-  void begin(void);
+  void begin(String hostname = "");
   uint16_t read(void);
+  /* returns 1 for Ok, or 0 on problem */
+  int write(void);
+  void setByte(uint16_t pos, uint8_t value);
   void printPacketHeader(void);
   void printPacketContent(void);
 
@@ -73,9 +76,24 @@ public:
     return incomingUniverse;
   }
 
+  inline void setUniverse(uint16_t universe)
+  {
+    outgoingUniverse = universe;
+  }
+
+  inline void setPhisical(uint8_t port)
+  {
+    phisical = port;
+  }
+
   inline uint16_t getLength(void)
   {
     return dmxDataLength;
+  } 
+
+  inline void setLength(uint16_t len)
+  {
+    dmxDataLength = len;
   } 
 
   inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)) 
@@ -86,11 +104,14 @@ public:
 private:
   WiFiUDP Udp;
   
+  String host;
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
   uint16_t packetSize;
   uint16_t opcode;
   uint8_t sequence;
+  uint8_t phisical;
   uint16_t incomingUniverse;
+  uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
 };

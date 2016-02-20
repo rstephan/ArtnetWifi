@@ -29,9 +29,12 @@ THE SOFTWARE.
 
 ArtnetWifi::ArtnetWifi() {}
 
-void ArtnetWifi::begin(void)
+void ArtnetWifi::begin(String hostname)
 {
   Udp.begin(ART_NET_PORT);
+  host = hostname;
+  sequence = 1;
+  phisical = 0;
 }
 
 uint16_t ArtnetWifi::read(void)
@@ -69,6 +72,44 @@ uint16_t ArtnetWifi::read(void)
   {
     return 0;
   }
+}
+
+int ArtnetWifi::write(void)
+{
+  uint16_t len;
+  uint16_t version;
+  
+  memcpy(artnetPacket, ART_NET_ID, 8);
+  opcode = ART_DMX;
+  artnetPacket[8] = opcode;
+  artnetPacket[9] = opcode >> 8;
+  version = 14;
+  artnetPacket[11] = version;
+  artnetPacket[10] = version >> 8;
+  artnetPacket[12] = sequence;
+  sequence++;
+  if (!sequence) {
+    sequence = 1;
+  }
+  artnetPacket[13] = phisical;
+  artnetPacket[14] = outgoingUniverse;
+  artnetPacket[15] = outgoingUniverse >> 8; 
+  len = dmxDataLength + (dmxDataLength % 2); // make a even number 
+  artnetPacket[17] = len;
+  artnetPacket[16] = len >> 8;
+  
+  Udp.beginPacket(host.c_str(), ART_NET_PORT);
+  Udp.write(artnetPacket, ART_DMX_START + len);
+  
+  return Udp.endPacket();
+}
+
+void ArtnetWifi::setByte(uint16_t pos, uint8_t value)
+{
+  if (pos > 512) {
+    return;
+  }
+  artnetPacket[ART_DMX_START + pos] = value;
 }
 
 void ArtnetWifi::printPacketHeader(void)
