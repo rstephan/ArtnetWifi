@@ -4,8 +4,9 @@ Adafruit's NeoPixel library: https://github.com/adafruit/Adafruit_NeoPixel
 This example may be copied under the terms of the MIT license, see the LICENSE file for details
 */
 
+#include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
 #include <ArtnetWifi.h>
-#include <WiFISPI.h>
 #include <Adafruit_NeoPixel.h>
 
 //Wifi settings
@@ -63,22 +64,23 @@ boolean ConnectWifi(void)
   return state;
 }
 
-void setup()
+void initTest()
 {
-  Serial.begin(115200);
-  ConnectWifi();
-  artnet.begin();
-  leds.begin();
-  initTest();
-
-  // this will be called for each packet received
-  artnet.setArtDmxCallback(onDmxFrame);
-}
-
-void loop()
-{
-  // we call the read function inside the loop
-  artnet.read();
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 127, 0, 0);
+  leds.show();
+  delay(500);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 127, 0);
+  leds.show();
+  delay(500);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 0, 127);
+  leds.show();
+  delay(500);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 0, 0);
+  leds.show();
 }
 
 void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
@@ -122,21 +124,20 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   }
 }
 
-void initTest()
+void setup()
 {
-  for (int i = 0 ; i < numLeds ; i++)
-    leds.setPixelColor(i, 127, 0, 0);
-  leds.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++)
-    leds.setPixelColor(i, 0, 127, 0);
-  leds.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++)
-    leds.setPixelColor(i, 0, 0, 127);
-  leds.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++)
-    leds.setPixelColor(i, 0, 0, 0);
-  leds.show();
+  Serial.begin(115200);
+  ConnectWifi();
+  artnet.begin();
+  leds.begin();
+  initTest();
+
+  // this will be called for each packet received
+  artnet.setArtDmxCallback(onDmxFrame);
+}
+
+void loop()
+{
+  // we call the read function inside the loop
+  artnet.read();
 }
