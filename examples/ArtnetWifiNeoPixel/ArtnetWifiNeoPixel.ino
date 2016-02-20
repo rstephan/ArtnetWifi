@@ -1,27 +1,25 @@
 /*
 This example will receive multiple universes via Artnet and control a strip of ws2811 leds via 
-Paul Stoffregen's excellent OctoWS2811 library: https://www.pjrc.com/teensy/td_libs_OctoWS2811.html
+Adafruit's NeoPixel library: https://github.com/adafruit/Adafruit_NeoPixel
 This example may be copied under the terms of the MIT license, see the LICENSE file for details
 */
 
-#include <Artnet.h>
-#include <Ethernet.h>
-#include <EthernetUdp.h>
-#include <SPI.h>
-#include <OctoWS2811.h>
+#include <ArtnetWifi.h>
+#include <WiFISPI.h>
+#include <Adafruit_NeoPixel.h>
 
-// OctoWS2811 settings
-const int ledsPerStrip = 240; // change for your setup
-const byte numStrips= 2; // change for your setup
-const int numLeds = ledsPerStrip * numStrips;
+//Wifi settings
+const char* ssid = "ssid";
+const char* password = "pAsSwOrD";
+
+// Neopixel settings
+const int numLeds = 240; // change for your setup
 const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
-DMAMEM int displayMemory[ledsPerStrip*6];
-int drawingMemory[ledsPerStrip*6];
-const int config = WS2811_GRB | WS2811_800kHz;
-OctoWS2811 leds(ledsPerStrip, displayMemory, drawingMemory, config);
+const byte dataPin = 2;
+Adafruit_NeoPixel leds = Adafruit_NeoPixel(numLeds, dataPin, NEO_GRB + NEO_KHZ800);
 
 // Artnet settings
-Artnet artnet;
+ArtnetWifi artnet;
 const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as 0.
 
 // Check if we got all universes
@@ -30,14 +28,46 @@ bool universesReceived[maxUniverses];
 bool sendFrame = 1;
 int previousDataLength = 0;
 
-// Change ip and mac address for your setup
-byte ip[] = {192, 168, 2, 2};
-byte mac[] = {0x04, 0xE9, 0xE5, 0x00, 0x69, 0xEC};
+// connect to wifi – returns true if successful or false if not
+boolean ConnectWifi(void)
+{
+  boolean state = true;
+  int i = 0;
+
+  WiFi.begin(ssid, password);
+  Serial.println("");
+  Serial.println("Connecting to WiFi");
+  
+  // Wait for connection
+  Serial.print("Connecting");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    if (i > 20){
+      state = false;
+      break;
+    }
+    i++;
+  }
+  if (state){
+    Serial.println("");
+    Serial.print("Connected to ");
+    Serial.println(ssid);
+    Serial.print("IP address: ");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("");
+    Serial.println("Connection failed.");
+  }
+  
+  return state;
+}
 
 void setup()
 {
-  //Serial.begin(115200);
-  artnet.begin(mac, ip);
+  Serial.begin(115200);
+  ConnectWifi();
+  artnet.begin();
   leds.begin();
   initTest();
 
@@ -54,6 +84,12 @@ void loop()
 void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
 {
   sendFrame = 1;
+  // set brightness of the whole strip 
+  if (universe == 15)
+  {
+    leds.setBrightness(data[0]);
+    leds.show();
+  }
 
   // Store which universe has got in
   if ((universe - startUniverse) < maxUniverses)
@@ -63,6 +99,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   {
     if (universesReceived[i] == 0)
     {
+      //Serial.println("Broke");
       sendFrame = 0;
       break;
     }
@@ -73,9 +110,9 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   {
     int led = i + (universe - startUniverse) * (previousDataLength / 3);
     if (led < numLeds)
-      leds.setPixel(led, data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+      leds.setPixelColor(led, data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
   }
-  previousDataLength = length;      
+  previousDataLength = length;     
   
   if (sendFrame)
   {
@@ -88,18 +125,18 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 void initTest()
 {
   for (int i = 0 ; i < numLeds ; i++)
-    leds.setPixel(i, 127, 0, 0);
+    leds.setPixelColor(i, 127, 0, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < numLeds  ; i++)
-    leds.setPixel(i, 0, 127, 0);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 127, 0);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < numLeds  ; i++)
-    leds.setPixel(i, 0, 0, 127);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 0, 127);
   leds.show();
   delay(500);
-  for (int i = 0 ; i < numLeds  ; i++)
-    leds.setPixel(i, 0, 0, 0);
+  for (int i = 0 ; i < numLeds ; i++)
+    leds.setPixelColor(i, 0, 0, 0);
   leds.show();
 }
