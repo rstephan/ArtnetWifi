@@ -29,7 +29,7 @@ THE SOFTWARE.
 #define ARTNET_WIFI_H
 
 #include <Arduino.h>
-#include <WiFiUDP.h>
+#include <WiFiUdp.h>
 
 // UDP specific
 #define ART_NET_PORT 6454
