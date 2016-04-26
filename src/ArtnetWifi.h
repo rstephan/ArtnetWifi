@@ -51,6 +51,7 @@ public:
   uint16_t read(void);
   /* returns 1 for Ok, or 0 on problem */
   int write(void);
+  int write(IPAddress ip);
   void setByte(uint16_t pos, uint8_t value);
   void printPacketHeader(void);
   void printPacketContent(void);
@@ -102,8 +103,9 @@ public:
   }
 
 private:
-  WiFiUDP Udp;
+  uint16_t makePacket(void);
   
+  WiFiUDP Udp;
   String host;
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
   uint16_t packetSize;

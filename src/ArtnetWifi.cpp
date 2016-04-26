@@ -74,11 +74,11 @@ uint16_t ArtnetWifi::read(void)
   }
 }
 
-int ArtnetWifi::write(void)
+uint16_t ArtnetWifi::makePacket(void)
 {
   uint16_t len;
   uint16_t version;
-  
+
   memcpy(artnetPacket, ART_NET_ID, 8);
   opcode = ART_DMX;
   artnetPacket[8] = opcode;
@@ -98,9 +98,28 @@ int ArtnetWifi::write(void)
   artnetPacket[17] = len;
   artnetPacket[16] = len >> 8;
   
+  return len;
+}
+
+int ArtnetWifi::write(void)
+{
+  uint16_t len;
+
+  len = makePacket();
   Udp.beginPacket(host.c_str(), ART_NET_PORT);
   Udp.write(artnetPacket, ART_DMX_START + len);
-  
+
+  return Udp.endPacket();
+}
+
+int ArtnetWifi::write(IPAddress ip)
+{
+  uint16_t len;
+
+  len = makePacket();
+  Udp.beginPacket(ip, ART_NET_PORT);
+  Udp.write(artnetPacket, ART_DMX_START + len);
+
   return Udp.endPacket();
 }
 
