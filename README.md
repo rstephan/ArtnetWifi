@@ -18,7 +18,7 @@ Different examples are provided, here is a summary of what each example does.
 
 This example will receive multiple universes via Art-Net and control a strip of ws2811 leds via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
-### ArtnetWifiTranmit
+### ArtnetWifiTransmit
 
 This is a simple transmitter. Send 3 byte over into the Art-Net, to make a RGB light ramp-up in white.
 
