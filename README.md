@@ -1,6 +1,6 @@
 # ArtnetWifi
 
-An Art-Net library for Wifi-Arduino (aka. ESP8266)
+An Art-Net library for Wifi-Arduino's (aka. ESP8266 or ESP32)
 
 Note: this library assumes you are using a wifi module
 
