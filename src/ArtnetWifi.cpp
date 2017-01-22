@@ -27,6 +27,9 @@ THE SOFTWARE.
 
 #include <ArtnetWifi.h>
 
+
+const char ArtnetWifi::artnetId[] = ART_NET_ID;
+
 ArtnetWifi::ArtnetWifi() {}
 
 void ArtnetWifi::begin(String hostname)
@@ -46,12 +49,10 @@ uint16_t ArtnetWifi::read(void)
       Udp.read(artnetPacket, MAX_BUFFER_ARTNET);
 
       // Check that packetID is "Art-Net" else ignore
-      for (byte i = 0 ; i < 9 ; i++)
-      {
-        if (artnetPacket[i] != ART_NET_ID[i])
-          return 0;
+      if (memcmp(artnetPacket, artnetId, sizeof(artnetId)) != 0) {
+        return 0;
       }
-        
+
       opcode = artnetPacket[8] | artnetPacket[9] << 8; 
 
       if (opcode == ART_DMX)
@@ -79,7 +80,7 @@ uint16_t ArtnetWifi::makePacket(void)
   uint16_t len;
   uint16_t version;
 
-  memcpy(artnetPacket, ART_NET_ID, 8);
+  memcpy(artnetPacket, artnetId, sizeof(artnetId));
   opcode = ART_DMX;
   artnetPacket[8] = opcode;
   artnetPacket[9] = opcode >> 8;

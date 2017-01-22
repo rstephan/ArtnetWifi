@@ -39,7 +39,7 @@ THE SOFTWARE.
 // Buffers
 #define MAX_BUFFER_ARTNET 530
 // Packet
-#define ART_NET_ID "Art-Net\0"
+#define ART_NET_ID "Art-Net"
 #define ART_DMX_START 18
 
 class ArtnetWifi
@@ -116,6 +116,7 @@ private:
   uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
+  static const char artnetId[];
 };
 
 #endif
