@@ -43,7 +43,7 @@ void ArtnetWifi::begin(String hostname)
 uint16_t ArtnetWifi::read(void)
 {
   packetSize = Udp.parsePacket();
-  
+
   if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
   { 
       Udp.read(artnetPacket, MAX_BUFFER_ARTNET);
@@ -69,10 +69,8 @@ uint16_t ArtnetWifi::read(void)
         return ART_POLL; 
       }
   }
-  else
-  {
-    return 0;
-  }
+
+  return 0;
 }
 
 uint16_t ArtnetWifi::makePacket(void)
