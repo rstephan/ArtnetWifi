@@ -16,6 +16,7 @@ Different examples are provided, here is a summary of what each example does.
 
 ### ArtnetWifiNeoPixel
 
+**ESP8266 only**
 This example will receive multiple universes via Art-Net and control a strip of ws2811 leds via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
 ### ArtnetWifiTransmit
