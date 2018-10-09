@@ -19,3 +19,4 @@ setPhisical	KEYWORD2
 getLength	KEYWORD2
 setLength	KEYWORD2
 setArtDmxCallback	KEYWORD2
+setArtPollReplyInformation KEYWORD2

@@ -30,7 +30,11 @@ THE SOFTWARE.
 
 const char ArtnetWifi::artnetId[] = ART_NET_ID;
 
-ArtnetWifi::ArtnetWifi() {}
+ArtnetWifi::ArtnetWifi() :
+  nodeIp(),
+  broadcastIp(),
+  shortName(""),
+  longName("") {}
 
 void ArtnetWifi::begin(String hostname)
 {
@@ -42,6 +46,8 @@ void ArtnetWifi::begin(String hostname)
 
 uint16_t ArtnetWifi::read(void)
 {
+  sendArtPollReplyPacket();
+
   packetSize = Udp.parsePacket();
 
   if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
@@ -98,6 +104,126 @@ uint16_t ArtnetWifi::makePacket(void)
   artnetPacket[16] = len >> 8;
   
   return len;
+}
+
+bool ArtnetWifi::setArtPollReplyInformation(IPAddress nodeIp, IPAddress broadcastIp, String shortName, String longName)
+{
+  if (shortName.length() > 17 || longName.length() > 63)
+  {
+    return false;
+  }
+
+  this->nodeIp = nodeIp;
+  this->broadcastIp = broadcastIp;
+  this->shortName = shortName;
+  this->longName = longName;
+
+  return true;
+}
+
+void ArtnetWifi::sendArtPollReplyPacket(void)
+{
+  if ((uint32_t) broadcastIp == 0 || millis() < nextPollReply)
+  {
+    return;
+  }
+
+  // only actually send an ArtPollReply packet every 2 seconds
+  nextPollReply = millis() + 2000;
+
+
+  uint16_t len;
+
+  // Art-Net ID
+  memcpy(artnetPacket, artnetId, sizeof(artnetId));
+
+  // OpCode
+  opcode = ART_POLL_REPLY;
+  artnetPacket[8] = opcode; // low byte
+  artnetPacket[9] = opcode >> 8; // high byte
+
+  // IP address
+  artnetPacket[10] = nodeIp[0];
+  artnetPacket[11] = nodeIp[1];
+  artnetPacket[12] = nodeIp[2];
+  artnetPacket[13] = nodeIp[3];
+
+  // Port
+  artnetPacket[14] = 0x36; // low byte
+  artnetPacket[15] = 0x19; // high byte
+
+  // VersionInfo
+  uint16_t version = 14;
+  artnetPacket[16] = version >> 8; // high byte
+  artnetPacket[17] = version; // low byte
+
+  // NetSwitch / SubSwitch
+  artnetPacket[18] = 0;
+  artnetPacket[19] = 0;
+
+  // Oem
+  artnetPacket[20] = 0; // high byte
+  artnetPacket[21] = 0; // low byte
+
+  // Ubea Version
+  artnetPacket[22] = 0;
+
+  // Status1
+  artnetPacket[23] = 0;
+
+  // EstaMan
+  artnetPacket[24] = 0; // low byte
+  artnetPacket[25] = 0; // high byte
+
+  // ShortName
+  len = shortName.length();
+  memcpy(artnetPacket + 26, shortName.c_str(), len);
+  memset(artnetPacket + 26 + len, 0, 18 - len);
+
+  // LongName
+  len = longName.length();
+  memcpy(artnetPacket + 44, longName.c_str(), len);
+  memset(artnetPacket + 44 + len, 0, 64 - len);
+
+  // NodeReport
+  memset(artnetPacket + 108, 0, 64);
+
+  // NumPorts
+  artnetPacket[172] = 0; // high byte
+  artnetPacket[173] = 1; // low byte
+
+  // PortTypes[4]
+  artnetPacket[174] = 0x80;
+  artnetPacket[175] = 0;
+  artnetPacket[176] = 0;
+  artnetPacket[177] = 0;
+
+  // GoodInput[4]
+  // GoodOutput[4]
+  // SwIn[4]
+  // SwOut[4]
+  // SwVideo
+  // SwMacro
+  // SwRemote
+  // Spare[3]
+  // Style
+  // MAC address (6 bytes)
+  // BindIp[4]
+  // BindIndex
+  memset(&artnetPacket[178], 0, 34);
+
+  // Status2
+  artnetPacket[212] = 0x01;
+
+  // Filler
+  memset(&artnetPacket[213], 0, 26);
+
+  len = 239;
+
+
+  Udp.beginPacket(broadcastIp, ART_NET_PORT);
+  Udp.write(artnetPacket, len);
+  Udp.endPacket();
 }
 
 int ArtnetWifi::write(void)

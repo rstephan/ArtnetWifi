@@ -35,6 +35,7 @@ THE SOFTWARE.
 #define ART_NET_PORT 6454
 // Opcodes
 #define ART_POLL 0x2000
+#define ART_POLL_REPLY 0x2100
 #define ART_DMX 0x5000
 // Buffers
 #define MAX_BUFFER_ARTNET 530
@@ -55,6 +56,8 @@ public:
   void setByte(uint16_t pos, uint8_t value);
   void printPacketHeader(void);
   void printPacketContent(void);
+
+  bool setArtPollReplyInformation(IPAddress nodeIp, IPAddress broadcastIp, String shortName, String longName);
 
   // Return a pointer to the start of the DMX data
   inline uint8_t* getDmxFrame(void)
@@ -104,7 +107,8 @@ public:
 
 private:
   uint16_t makePacket(void);
-  
+  void sendArtPollReplyPacket(void);
+
   WiFiUDP Udp;
   String host;
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
@@ -115,6 +119,13 @@ private:
   uint16_t incomingUniverse;
   uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
+
+  uint32_t nextPollReply;
+  IPAddress nodeIp;
+  IPAddress broadcastIp;
+  String shortName;
+  String longName;
+
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
   static const char artnetId[];
 };
