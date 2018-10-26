@@ -37,7 +37,7 @@ void ArtnetWifi::begin(String hostname)
   Udp.begin(ART_NET_PORT);
   host = hostname;
   sequence = 1;
-  phisical = 0;
+  physical = 0;
 }
 
 uint16_t ArtnetWifi::read(void)
@@ -45,7 +45,7 @@ uint16_t ArtnetWifi::read(void)
   packetSize = Udp.parsePacket();
 
   if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
-  { 
+  {
       Udp.read(artnetPacket, MAX_BUFFER_ARTNET);
 
       // Check that packetID is "Art-Net" else ignore
@@ -53,12 +53,12 @@ uint16_t ArtnetWifi::read(void)
         return 0;
       }
 
-      opcode = artnetPacket[8] | artnetPacket[9] << 8; 
+      opcode = artnetPacket[8] | artnetPacket[9] << 8;
 
       if (opcode == ART_DMX)
       {
         sequence = artnetPacket[12];
-        incomingUniverse = artnetPacket[14] | artnetPacket[15] << 8;  
+        incomingUniverse = artnetPacket[14] | artnetPacket[15] << 8;
         dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
 
         if (artDmxCallback) (*artDmxCallback)(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
@@ -66,7 +66,7 @@ uint16_t ArtnetWifi::read(void)
       }
       if (opcode == ART_POLL)
       {
-        return ART_POLL; 
+        return ART_POLL;
       }
   }
 
@@ -90,13 +90,13 @@ uint16_t ArtnetWifi::makePacket(void)
   if (!sequence) {
     sequence = 1;
   }
-  artnetPacket[13] = phisical;
+  artnetPacket[13] = physical;
   artnetPacket[14] = outgoingUniverse;
-  artnetPacket[15] = outgoingUniverse >> 8; 
-  len = dmxDataLength + (dmxDataLength % 2); // make a even number 
+  artnetPacket[15] = outgoingUniverse >> 8;
+  len = dmxDataLength + (dmxDataLength % 2); // make a even number
   artnetPacket[17] = len;
   artnetPacket[16] = len >> 8;
-  
+
   return len;
 }
 

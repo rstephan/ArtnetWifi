@@ -82,36 +82,42 @@ public:
     outgoingUniverse = universe;
   }
 
+  inline void setPhysical(uint8_t port)
+  {
+    physical = port;
+  }
+
+  [[deprecated]]
   inline void setPhisical(uint8_t port)
   {
-    phisical = port;
+    setPhysical(port);
   }
 
   inline uint16_t getLength(void)
   {
     return dmxDataLength;
-  } 
+  }
 
   inline void setLength(uint16_t len)
   {
     dmxDataLength = len;
-  } 
+  }
 
-  inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)) 
+  inline void setArtDmxCallback(void (*fptr)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data))
   {
     artDmxCallback = fptr;
   }
 
 private:
   uint16_t makePacket(void);
-  
+
   WiFiUDP Udp;
   String host;
   uint8_t artnetPacket[MAX_BUFFER_ARTNET];
   uint16_t packetSize;
   uint16_t opcode;
   uint8_t sequence;
-  uint8_t phisical;
+  uint8_t physical;
   uint16_t incomingUniverse;
   uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
