@@ -14,6 +14,17 @@ Place this in your `~/Documents/Arduino/libraries` folder.
 
 Different examples are provided, here is a summary of what each example does.
 
+### ArtnetWifiDebug
+
+Simple test for WiFi, serial and Art-Net.
+
+Example output (Serial Monitor, 115200 Baud):
+```
+DMX: Univ: 0, Seq: 0, Data (48): 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ...
+```
+
+If this example is not working, don`t try anything else!
+
 ### ArtnetWifiNeoPixel
 
 **ESP8266 only**
