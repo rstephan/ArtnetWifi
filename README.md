@@ -23,12 +23,16 @@ Example output (Serial Monitor, 115200 Baud):
 DMX: Univ: 0, Seq: 0, Data (48): 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ...
 ```
 
-If this example is not working, don`t try anything else!
+If this example is not working, don't try anything else!
+
+### ArtnetWifiFastLED
+
+This example will receive multiple universes via Art-Net and control a strip of WS2812 LEDs via the [FastLED library](https://github.com/FastLED/FastLED). It is similar to the NeoPixel example but it will work on the ESP32 and the ESP8266 controller as well.
 
 ### ArtnetWifiNeoPixel
 
-**ESP8266 only**
-This example will receive multiple universes via Art-Net and control a strip of ws2811 leds via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
+**ESP8266 only!**
+This example will receive multiple universes via Art-Net and control a strip of WS2811 LEDs via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
 ### ArtnetWifiTransmit
 
