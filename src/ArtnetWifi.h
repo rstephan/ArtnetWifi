@@ -30,6 +30,7 @@ THE SOFTWARE.
 
 #include <Arduino.h>
 #include <WiFiUdp.h>
+#include <functional>
 
 // UDP specific
 #define ART_NET_PORT 6454
@@ -41,6 +42,9 @@ THE SOFTWARE.
 // Packet
 #define ART_NET_ID "Art-Net"
 #define ART_DMX_START 18
+
+#define DMX_FUNC_PARAM uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data
+typedef std::function <void (DMX_FUNC_PARAM)> StdFuncDmx_t;
 
 class ArtnetWifi
 {
@@ -108,6 +112,11 @@ public:
     artDmxCallback = fptr;
   }
 
+  inline void setArtDmxFunc(StdFuncDmx_t func)
+  {
+    artDmxFunc = func;
+  }
+
 private:
   uint16_t makePacket(void);
 
@@ -122,6 +131,7 @@ private:
   uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
+  StdFuncDmx_t artDmxFunc;
   static const char artnetId[];
 };
 

@@ -62,6 +62,9 @@ uint16_t ArtnetWifi::read(void)
         dmxDataLength = artnetPacket[17] | artnetPacket[16] << 8;
 
         if (artDmxCallback) (*artDmxCallback)(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
+        if (artDmxFunc) {
+          artDmxFunc(incomingUniverse, dmxDataLength, sequence, artnetPacket + ART_DMX_START);
+        }
         return ART_DMX;
       }
       if (opcode == ART_POLL)
