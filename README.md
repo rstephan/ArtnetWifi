@@ -25,6 +25,10 @@ DMX: Univ: 0, Seq: 0, Data (48): 17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ...
 
 If this example is not working, don't try anything else!
 
+### ArtnetWifiDebug2 (ArtnetWifiDebug with C++11 style)
+
+See **ArtnetWifiDebug**.
+
 ### ArtnetWifiFastLED
 
 This example will receive multiple universes via Art-Net and control a strip of WS2812 LEDs via the [FastLED library](https://github.com/FastLED/FastLED). It is similar to the NeoPixel example but it will work on the ESP32 and the ESP8266 controller as well.
@@ -37,6 +41,7 @@ This example will receive multiple universes via Art-Net and control a strip of 
 ### ArtnetWifiTransmit
 
 This is a simple transmitter. Send 3 byte over into the Art-Net, to make a RGB light ramp-up in white.
+
 
 # Art-Net
 
