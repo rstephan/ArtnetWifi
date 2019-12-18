@@ -1,8 +1,8 @@
 # ArtnetWifi
 
-An Art-Net library for Wifi-Arduino's (aka. ESP8266 or ESP32)
+An Art-Net library for Wifi-Arduino's. Tested on ESP8266, ESP32, WiFi101 (e.g. MKR1000) and WiFiNINA (e.g. NANO 33 IoT) devices.
 
-Note: this library assumes you are using a wifi module
+Note: this library assumes you are using a wifi module.
 
 Based on https://github.com/natcl/Artnet [master](https://github.com/natcl/Artnet/archive/master.zip)
 
@@ -35,7 +35,7 @@ This example will receive multiple universes via Art-Net and control a strip of 
 
 ### ArtnetWifiNeoPixel
 
-**ESP8266 only!**
+**No ESP32 support!**
 This example will receive multiple universes via Art-Net and control a strip of WS2811 LEDs via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
 ### ArtnetWifiTransmit
