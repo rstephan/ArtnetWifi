@@ -5,15 +5,9 @@ Function pointer with the C++11 function-object "std::function".
 
 Stephan Ruloff 2019
 https://github.com/rstephan/ArtnetWifi
-
 */
-#if defined(ARDUINO_ARCH_ESP32)
-#include <WiFi.h>
-#else
-#include <ESP8266WiFi.h>
-#endif
-#include <WiFiUdp.h>
 #include <ArtnetWifi.h>
+#include <Arduino.h>
 
 //Wifi settings
 const char* ssid = "ssid";
@@ -67,7 +61,13 @@ void setup()
   artnet.setArtDmxFunc([](DMX_FUNC_PARAM){
     boolean tail = false;
 
-    Serial.printf("DMX: Univ: %i, Seq: %i, Data (%i): ", universe, sequence, length);
+    Serial.print("DMX: Univ: ");
+    Serial.print(universe, DEC);
+    Serial.print(", Seq: ");
+    Serial.print(sequence, DEC);
+    Serial.print(", Data (");
+    Serial.print(length, DEC);
+    Serial.print("): ");
 
     if (length > 16) {
       length = 16;

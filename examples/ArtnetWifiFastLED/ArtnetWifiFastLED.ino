@@ -3,14 +3,8 @@ This example will receive multiple universes via Art-Net and control a strip of
 WS2812 LEDs via the FastLED library: https://github.com/FastLED/FastLED
 This example may be copied under the terms of the MIT license, see the LICENSE file for details
 */
-
-#if defined(ARDUINO_ARCH_ESP32)
-#include <WiFi.h>
-#else
-#include <ESP8266WiFi.h>
-#endif
-#include <WiFiUdp.h>
 #include <ArtnetWifi.h>
+#include <Arduino.h>
 #include <FastLED.h>
 
 // Wifi settings

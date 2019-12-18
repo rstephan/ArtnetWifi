@@ -3,10 +3,11 @@ This example will receive multiple universes via Artnet and control a strip of w
 Adafruit's NeoPixel library: https://github.com/adafruit/Adafruit_NeoPixel
 This example may be copied under the terms of the MIT license, see the LICENSE file for details
 */
-
-#include <ESP8266WiFi.h>
-#include <WiFiUdp.h>
 #include <ArtnetWifi.h>
+#include <Arduino.h>
+#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32)
+#error "No ESP32 support! Try the FastLED example."
+#endif
 #include <Adafruit_NeoPixel.h>
 
 //Wifi settings
