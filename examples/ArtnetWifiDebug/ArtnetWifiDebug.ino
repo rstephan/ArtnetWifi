@@ -1,17 +1,11 @@
 /*
 Example, transmit all received ArtNet messages (DMX) out of the serial port in plain text.
 
-Stephan Ruloff 2016
+Stephan Ruloff 2016,2019
 https://github.com/rstephan
-
 */
-#if defined(ARDUINO_ARCH_ESP32)
-#include <WiFi.h>
-#else
-#include <ESP8266WiFi.h>
-#endif
-#include <WiFiUdp.h>
 #include <ArtnetWifi.h>
+#include <Arduino.h>
 
 //Wifi settings
 const char* ssid = "ssid";
@@ -46,7 +40,7 @@ boolean ConnectWifi(void)
     Serial.print("Connected to ");
     Serial.println(ssid);
     Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
+    Serial.println(IPAddress(WiFi.localIP()));
   } else {
     Serial.println("");
     Serial.println("Connection failed.");

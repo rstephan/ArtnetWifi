@@ -3,7 +3,7 @@
 Copyright (c) 2014 Nathanaël Lécaudé
 https://github.com/natcl/Artnet, http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811
 
-Copyright (c) 2016 Stephan Ruloff
+Copyright (c) 2016,2019 Stephan Ruloff
 https://github.com/rstephan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

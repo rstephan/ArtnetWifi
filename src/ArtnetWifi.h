@@ -3,7 +3,7 @@
 Copyright (c) 2014 Nathanaël Lécaudé
 https://github.com/natcl/Artnet, http://forum.pjrc.com/threads/24688-Artnet-to-OctoWS2811
 
-Copyright (c) 2016 Stephan Ruloff
+Copyright (c) 2016,2019 Stephan Ruloff
 https://github.com/rstephan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,9 +28,22 @@ THE SOFTWARE.
 #ifndef ARTNET_WIFI_H
 #define ARTNET_WIFI_H
 
-#include <Arduino.h>
-#include <WiFiUdp.h>
 #include <functional>
+#include <Arduino.h>
+#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32)
+#include <WiFi.h>
+#elif defined(ARDUINO_ARCH_ESP8266)
+#include <ESP8266WiFi.h>
+#elif defined(ARDUINO_ARCH_SAMD)
+#if defined(ARDUINO_SAMD_MKR1000)
+#include <WiFi101.h>
+#else
+#include <WiFiNINA.h>
+#endif
+#else
+#error "Architecture not supported!"
+#endif
+#include <WiFiUdp.h>
 
 // UDP specific
 #define ART_NET_PORT 6454
