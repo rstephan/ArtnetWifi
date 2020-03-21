@@ -8,6 +8,20 @@ Based on https://github.com/natcl/Artnet [master](https://github.com/natcl/Artne
 
 ## Installation
 
+### Arduino IDE
+
+Navigate to **Sketch** -> **Include Library** -> **Manage Libraries...**,
+then search for `ArtnetWifi` and the library will show up. Click **Install** and the library is ready to use.
+
+### PlatformIO Core (CLI)
+
+```
+$ pio init --board nodemcuv2
+$ pio lib install artnetwifi
+```
+
+### Manual
+
 Place this in your `~/Documents/Arduino/libraries` folder.
 
 ## Examples
