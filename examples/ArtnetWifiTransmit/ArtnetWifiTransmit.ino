@@ -15,9 +15,9 @@ const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, s
 const char host[] = "2.1.1.1"; // CHANGE FOR YOUR SETUP your destination
 
 // connect to wifi – returns true if successful or false if not
-boolean ConnectWifi(void)
+bool ConnectWifi(void)
 {
-  boolean state = true;
+  bool state = true;
   int i = 0;
 
   WiFi.begin(ssid, password);

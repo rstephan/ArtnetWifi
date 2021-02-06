@@ -31,9 +31,9 @@ bool sendFrame = 1;
 int previousDataLength = 0;
 
 // connect to wifi – returns true if successful or false if not
-boolean ConnectWifi(void)
+bool ConnectWifi(void)
 {
-  boolean state = true;
+  bool state = true;
   int i = 0;
 
   WiFi.begin(ssid, password);

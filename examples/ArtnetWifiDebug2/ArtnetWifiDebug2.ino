@@ -17,9 +17,9 @@ WiFiUDP UdpSend;
 ArtnetWifi artnet;
 
 // connect to wifi – returns true if successful or false if not
-boolean ConnectWifi(void)
+bool ConnectWifi(void)
 {
-  boolean state = true;
+  bool state = true;
   int i = 0;
 
   WiFi.begin(ssid, password);
@@ -59,7 +59,7 @@ void setup()
 
   // this will be called for each packet received
   artnet.setArtDmxFunc([](DMX_FUNC_PARAM){
-    boolean tail = false;
+    bool tail = false;
 
     Serial.print("DMX: Univ: ");
     Serial.print(universe, DEC);

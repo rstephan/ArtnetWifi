@@ -15,9 +15,9 @@ WiFiUDP UdpSend;
 ArtnetWifi artnet;
 
 // connect to wifi – returns true if successful or false if not
-boolean ConnectWifi(void)
+bool ConnectWifi(void)
 {
-  boolean state = true;
+  bool state = true;
   int i = 0;
 
   WiFi.begin(ssid, password);
@@ -51,7 +51,7 @@ boolean ConnectWifi(void)
 
 void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
 {
-  boolean tail = false;
+  bool tail = false;
   
   Serial.print("DMX: Univ: ");
   Serial.print(universe, DEC);
