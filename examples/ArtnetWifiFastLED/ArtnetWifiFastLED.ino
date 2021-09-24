@@ -96,10 +96,17 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
     FastLED.show();
   }
 
-  // Store which universe has got in
-  if ((universe - startUniverse) < maxUniverses) {
-    universesReceived[universe - startUniverse] = 1;
+  // range check
+  if (universe < startUniverse) {
+    return;
   }
+  uint8_t index = universe - startUniverse;
+  if (index >= maxUniverses) {
+    return;
+  }
+
+  // Store which universe has got in
+  universesReceived[index] = true;
 
   for (int i = 0 ; i < maxUniverses ; i++)
   {
@@ -114,7 +121,7 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   // read universe and put into the right part of the display buffer
   for (int i = 0; i < length / 3; i++)
   {
-    int led = i + (universe - startUniverse) * (previousDataLength / 3);
+    int led = i + (index * (previousDataLength / 3));
     if (led < numLeds)
       leds[led] = CRGB(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
   }
