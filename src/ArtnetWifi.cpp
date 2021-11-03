@@ -71,6 +71,10 @@ uint16_t ArtnetWifi::read(void)
       {
         return ART_POLL;
       }
+      if (opcode == ART_SYNC)
+      {
+        return ART_SYNC;
+      }
   }
 
   return 0;
