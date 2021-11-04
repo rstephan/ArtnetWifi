@@ -50,6 +50,7 @@ THE SOFTWARE.
 // Opcodes
 #define ART_POLL 0x2000
 #define ART_DMX 0x5000
+#define ART_SYNC 0x5200
 // Buffers
 #define MAX_BUFFER_ARTNET 530
 // Packet
