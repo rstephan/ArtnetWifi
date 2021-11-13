@@ -131,6 +131,11 @@ public:
     artDmxFunc = func;
   }
 
+  inline IPAddress& getSenderIp()
+  {
+    return senderIp;
+  }
+
 private:
   uint16_t makePacket(void);
 
@@ -147,6 +152,7 @@ private:
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
   StdFuncDmx_t artDmxFunc;
   static const char artnetId[];
+  IPAddress senderIp;
 };
 
 #endif
