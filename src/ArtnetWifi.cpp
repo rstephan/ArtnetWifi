@@ -46,6 +46,7 @@ uint16_t ArtnetWifi::read(void)
 
   if (packetSize <= MAX_BUFFER_ARTNET && packetSize > 0)
   {
+      senderIp =  Udp.remoteIP();
       Udp.read(artnetPacket, MAX_BUFFER_ARTNET);
 
       // Check that packetID is "Art-Net" else ignore
