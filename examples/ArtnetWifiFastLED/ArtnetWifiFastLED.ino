@@ -25,7 +25,6 @@ const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, s
 const int maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
 bool universesReceived[maxUniverses];
 bool sendFrame = 1;
-int previousDataLength = 0;
 
 
 // connect to wifi – returns true if successful or false if not
@@ -40,22 +39,27 @@ bool ConnectWifi(void)
 
   // Wait for connection
   Serial.print("Connecting");
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
-    if (i > 20){
+    if (i > 20)
+    {
       state = false;
       break;
     }
     i++;
   }
-  if (state){
+  if (state)
+  {
     Serial.println("");
     Serial.print("Connected to ");
     Serial.println(ssid);
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
-  } else {
+  }
+  else
+  {
     Serial.println("");
     Serial.println("Connection failed.");
   }
@@ -65,22 +69,26 @@ bool ConnectWifi(void)
 
 void initTest()
 {
-  for (int i = 0 ; i < numLeds ; i++) {
+  for (int i = 0 ; i < numLeds ; i++)
+  {
     leds[i] = CRGB(127, 0, 0);
   }
   FastLED.show();
   delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
+  for (int i = 0 ; i < numLeds ; i++)
+  {
     leds[i] = CRGB(0, 127, 0);
   }
   FastLED.show();
   delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
+  for (int i = 0 ; i < numLeds ; i++)
+  {
     leds[i] = CRGB(0, 0, 127);
   }
   FastLED.show();
   delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
+  for (int i = 0 ; i < numLeds ; i++)
+  {
     leds[i] = CRGB(0, 0, 0);
   }
   FastLED.show();
@@ -97,11 +105,13 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   }
 
   // range check
-  if (universe < startUniverse) {
+  if (universe < startUniverse)
+  {
     return;
   }
   uint8_t index = universe - startUniverse;
-  if (index >= maxUniverses) {
+  if (index >= maxUniverses)
+  {
     return;
   }
 
@@ -110,9 +120,8 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
 
   for (int i = 0 ; i < maxUniverses ; i++)
   {
-    if (universesReceived[i] == 0)
+    if (!universesReceived[i])
     {
-      //Serial.println("Broke");
       sendFrame = 0;
       break;
     }
@@ -121,11 +130,12 @@ void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* d
   // read universe and put into the right part of the display buffer
   for (int i = 0; i < length / 3; i++)
   {
-    int led = i + (index * (previousDataLength / 3));
+    int led = i + (index * 170);
     if (led < numLeds)
+    {
       leds[led] = CRGB(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+    }
   }
-  previousDataLength = length;
 
   if (sendFrame)
   {
@@ -143,6 +153,7 @@ void setup()
   FastLED.addLeds<WS2812, dataPin, GRB>(leds, numLeds);
   initTest();
 
+  memset(universesReceived, 0, maxUniverses);
   // this will be called for each packet received
   artnet.setArtDmxCallback(onDmxFrame);
 }
