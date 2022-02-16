@@ -59,6 +59,30 @@ This example will receive multiple universes via Art-Net and control a strip of 
 This is a simple transmitter. Send 3 byte over into the Art-Net, to make a RGB light ramp-up in white.
 
 
+### Notes
+
+The examples `FastLED` and `NeoPixel` can utilize many universes to light up hundreds of LEDs.
+Normaly Art-Net frame can handle 512 bytes. Divide this by 3 colors, so a single universe can
+have 170.66 LEDs. For easy access, only 170 LEDs are used. The last 2 byte per universe are "lost".
+
+**Example:** 240 LEDs, 720 Byte, 2 Universes
+
+**Universe "1"**
+
+|Byte |  1|  2|  3|...|508|509|510|511|512|
+|:----|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Color|  R|  G|  B|...|  R|  G|  B| x | x |
+|LED  |  1|  1|  1|...|170|170|170|   |   |
+
+**Universe "2"**
+
+|Byte |  1|  2|  3|...|208|209|210|
+|:----|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Color|  R|  G|  B|...|  R|  G|  B|
+|LED  |171|171|171|...|240|240|240|
+
+*You only have to send 510 byte DMX-data per frame. Extra byte(s) at the end will be ignored!*
+
 # Art-Net
 
 Art-Net(tm) is a trademark of Artistic Licence Holdings Ltd. The Art-Net protocol and associated documentation is copyright Artistic Licence Holdings Ltd.
