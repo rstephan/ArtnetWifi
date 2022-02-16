@@ -3,59 +3,60 @@ This example will receive multiple universes via Art-Net and control a strip of
 WS2812 LEDs via the FastLED library: https://github.com/FastLED/FastLED
 This example may be copied under the terms of the MIT license, see the LICENSE file for details
 */
-#include <ArtnetWifi.h>
+#include "ArtnetWifi.h"
 #include <Arduino.h>
 #include <FastLED.h>
 
 // Wifi settings
-const char* ssid = "ssid";
-const char* password = "pAsSwOrD";
+const char *SSID = "ssid";
+const char *PASSWORD = "pAsSwOrD";
 
 // LED settings
-const int numLeds = 8; // CHANGE FOR YOUR SETUP
-const int numberOfChannels = numLeds * 3; // Total number of channels you want to receive (1 led = 3 channels)
-const byte dataPin = 2;
-CRGB leds[numLeds];
+const int LED_COUNT = 300;               // CHANGE FOR YOUR SETUP
+const int CHANNEL_COUNT = LED_COUNT * 3; // Total number of channels you want to receive (1 led = 3 channels)
+const byte DATA_PIN = 2;
+CRGB leds[LED_COUNT];
 
 // Art-Net settings
+// CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as 0.
+const int START_UNIVERSE = 0;
+const int UNIVERSE_COUNT = CHANNEL_COUNT / 512 + ((CHANNEL_COUNT % 512) ? 1 : 0);
+bool universesReceived[UNIVERSE_COUNT];
+bool writeLeds = true;
 ArtnetWifi artnet;
-const int startUniverse = 0; // CHANGE FOR YOUR SETUP most software this is 1, some software send out artnet first universe as 0.
 
-// Check if we got all universes
-const int maxUniverses = numberOfChannels / 512 + ((numberOfChannels % 512) ? 1 : 0);
-bool universesReceived[maxUniverses];
-bool sendFrame = 1;
-int previousDataLength = 0;
-
-
-// connect to wifi – returns true if successful or false if not
-bool ConnectWifi(void)
+bool connectToWifi(void)
 {
   bool state = true;
   int i = 0;
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(SSID, PASSWORD);
   Serial.println("");
   Serial.println("Connecting to WiFi");
 
   // Wait for connection
   Serial.print("Connecting");
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
-    if (i > 20){
+    if (i > 20)
+    {
       state = false;
       break;
     }
     i++;
   }
-  if (state){
+  if (state)
+  {
     Serial.println("");
     Serial.print("Connected to ");
-    Serial.println(ssid);
+    Serial.println(SSID);
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
-  } else {
+  }
+  else
+  {
     Serial.println("");
     Serial.println("Connection failed.");
   }
@@ -63,92 +64,85 @@ bool ConnectWifi(void)
   return state;
 }
 
-void initTest()
+void testLeds()
 {
-  for (int i = 0 ; i < numLeds ; i++) {
-    leds[i] = CRGB(127, 0, 0);
+  std::vector<CRGB> colors{CRGB::Red, CRGB::Green, CRGB::Blue, CRGB::Black};
+  for (const auto color : colors)
+  {
+    FastLED.showColor(color);
+    delay(500);
   }
-  FastLED.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
-    leds[i] = CRGB(0, 127, 0);
-  }
-  FastLED.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
-    leds[i] = CRGB(0, 0, 127);
-  }
-  FastLED.show();
-  delay(500);
-  for (int i = 0 ; i < numLeds ; i++) {
-    leds[i] = CRGB(0, 0, 0);
-  }
-  FastLED.show();
 }
 
-void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data)
+void setChannel(unsigned universe, unsigned channel, uint8_t value)
 {
-  sendFrame = 1;
-  // set brightness of the whole strip
-  if (universe == 15)
+  // Get the index of leds array corresponding to the given universe and channel
+  unsigned ledIndex = (universe * 512 + channel) / 3;
+  // Avoid array index being out of bounds, since the last universe may not be completely represented in the leds
+  // array.
+  if (ledIndex >= LED_COUNT)
   {
-    FastLED.setBrightness(data[0]);
-    FastLED.show();
-  }
-
-  // range check
-  if (universe < startUniverse) {
     return;
   }
-  uint8_t index = universe - startUniverse;
-  if (index >= maxUniverses) {
+  // Get the index of the color channel
+  // 0 -> first channel (e.g. red), 1 -> second channel (e.g. green), 2 -> third channel (e.g. blue)
+  unsigned colorChannelIndex = (universe * 512 + channel) % 3;
+  leds[ledIndex][colorChannelIndex] = value;
+}
+
+void onDmxFrame(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t *data)
+{
+  // Range check
+  if (universe < START_UNIVERSE)
+  {
+    Serial.println("Error: Received universe index less than start index!");
     return;
   }
-
+  unsigned index = universe - START_UNIVERSE;
+  if (index >= UNIVERSE_COUNT)
+  {
+    Serial.println("Error: Received universe index greater than end index!");
+    return;
+  }
   // Store which universe has got in
   universesReceived[index] = true;
-
-  for (int i = 0 ; i < maxUniverses ; i++)
+  // Read received universe and put each channel into the right part of the display buffer
+  for (int i = 0; i < length; i++)
   {
-    if (universesReceived[i] == 0)
+    setChannel(index, i, data[i]);
+  }
+  // Check if all universes were received. We should then write the display buffer to the leds
+  writeLeds = true;
+  for (int i = 0; i < UNIVERSE_COUNT; i++)
+  {
+    if (universesReceived[i])
     {
-      //Serial.println("Broke");
-      sendFrame = 0;
+      writeLeds = false;
       break;
     }
   }
-
-  // read universe and put into the right part of the display buffer
-  for (int i = 0; i < length / 3; i++)
-  {
-    int led = i + (index * (previousDataLength / 3));
-    if (led < numLeds)
-      leds[led] = CRGB(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
-  }
-  previousDataLength = length;
-
-  if (sendFrame)
+  // Write to the LEDs if all universes where received
+  if (writeLeds)
   {
     FastLED.show();
-    // Reset universeReceived to 0
-    memset(universesReceived, 0, maxUniverses);
+    // Reset universeReceived to false
+    memset(universesReceived, false, UNIVERSE_COUNT);
   }
 }
 
 void setup()
 {
   Serial.begin(115200);
-  ConnectWifi();
-  artnet.begin();
-  FastLED.addLeds<WS2812, dataPin, GRB>(leds, numLeds);
-  initTest();
-
+  FastLED.addLeds<WS2812, DATA_PIN, GRB>(leds, LED_COUNT);
+  testLeds();
+  connectToWifi();
   // this will be called for each packet received
   artnet.setArtDmxCallback(onDmxFrame);
+  artnet.begin();
 }
 
 void loop()
 {
-  // we call the read function inside the loop
+  // We call the read function inside the loop
   artnet.read();
 }
