@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include <functional>
 #include <Arduino.h>
-#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32)
+#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
 #include <WiFi.h>
 #elif defined(ARDUINO_ARCH_ESP8266)
 #include <ESP8266WiFi.h>
