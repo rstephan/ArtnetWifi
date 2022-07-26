@@ -2,7 +2,7 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/ArtnetWifi.svg?)](https://www.ardu-badge.com/ArtnetWifi)
 
-An Art-Net library for Wifi-Arduino's. Tested on ESP8266, ESP32, WiFi101 (e.g. MKR1000) and WiFiNINA (e.g. NANO 33 IoT) devices.
+An Art-Net library for Wifi-Arduino's. Tested on ESP8266, ESP32, Pi Pico W, WiFi101 (e.g. MKR1000) and WiFiNINA (e.g. NANO 33 IoT) devices.
 
 Note: this library assumes you are using a wifi module.
 
