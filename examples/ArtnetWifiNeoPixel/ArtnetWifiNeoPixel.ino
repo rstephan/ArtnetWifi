@@ -5,9 +5,6 @@ This example may be copied under the terms of the MIT license, see the LICENSE f
 */
 #include <ArtnetWifi.h>
 #include <Arduino.h>
-#if defined(ARDUINO_ARCH_ESP32) || defined(ESP32)
-#error "No ESP32 support! Try the FastLED example."
-#endif
 #include <Adafruit_NeoPixel.h>
 
 //Wifi settings

@@ -51,7 +51,6 @@ This example will receive multiple universes via Art-Net and control a strip of 
 
 ### ArtnetWifiNeoPixel
 
-**No ESP32 support!**
 This example will receive multiple universes via Art-Net and control a strip of WS2811 LEDs via Adafruit's [NeoPixel library](https://github.com/adafruit/Adafruit_NeoPixel).
 
 ### ArtnetWifiTransmit
