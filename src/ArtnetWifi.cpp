@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 const char ArtnetWifi::artnetId[] = ART_NET_ID;
 
-ArtnetWifi::ArtnetWifi() {}
+ArtnetWifi::ArtnetWifi() : artDmxCallback(nullptr) {}
 
 void ArtnetWifi::begin(String hostname)
 {
