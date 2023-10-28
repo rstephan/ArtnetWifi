@@ -74,6 +74,8 @@ public:
   void printPacketHeader(void);
   void printPacketContent(void);
 
+  void stop(void);
+
   // Return a pointer to the start of the DMX data
   inline uint8_t* getDmxFrame(void)
   {
