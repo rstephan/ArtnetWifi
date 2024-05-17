@@ -28,18 +28,22 @@ THE SOFTWARE.
 #ifndef ARTNET_WIFI_H
 #define ARTNET_WIFI_H
 
-#include <functional>
 #include <Arduino.h>
 #if defined(ARDUINO_ARCH_ESP32) || defined(ESP32) || defined(ARDUINO_RASPBERRY_PI_PICO_W)
 #include <WiFi.h>
+#include <functional>
 #elif defined(ARDUINO_ARCH_ESP8266)
 #include <ESP8266WiFi.h>
+#include <functional>
 #elif defined(ARDUINO_ARCH_SAMD)
 #if defined(ARDUINO_SAMD_MKR1000)
 #include <WiFi101.h>
 #else
 #include <WiFiNINA.h>
 #endif
+#include <functional>
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+#include <WiFiNINA.h>
 #else
 #error "Architecture not supported!"
 #endif
@@ -58,7 +62,9 @@ THE SOFTWARE.
 #define ART_DMX_START 18
 
 #define DMX_FUNC_PARAM uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2)
 typedef std::function <void (DMX_FUNC_PARAM)> StdFuncDmx_t;
+#endif
 
 class ArtnetWifi
 {
@@ -128,10 +134,12 @@ public:
     artDmxCallback = fptr;
   }
 
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2)
   inline void setArtDmxFunc(StdFuncDmx_t func)
   {
     artDmxFunc = func;
   }
+#endif
 
   inline IPAddress& getSenderIp()
   {
@@ -152,7 +160,9 @@ private:
   uint16_t outgoingUniverse;
   uint16_t dmxDataLength;
   void (*artDmxCallback)(uint16_t universe, uint16_t length, uint8_t sequence, uint8_t* data);
+#if !defined(ARDUINO_AVR_UNO_WIFI_REV2)
   StdFuncDmx_t artDmxFunc;
+#endif
   static const char artnetId[];
   IPAddress senderIp;
 };
