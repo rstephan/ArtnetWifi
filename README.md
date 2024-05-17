@@ -45,6 +45,8 @@ If this example is not working, don't try anything else!
 
 See **ArtnetWifiDebug**.
 
+**Note:** Not all controllers support this type of code!
+
 ### ArtnetWifiFastLED
 
 This example will receive multiple universes via Art-Net and control a strip of WS2812 LEDs via the [FastLED library](https://github.com/FastLED/FastLED). It is similar to the NeoPixel example but it will work on the ESP32 and the ESP8266 controller as well.

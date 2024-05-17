@@ -6,6 +6,9 @@ Function pointer with the C++11 function-object "std::function".
 Stephan Ruloff 2019
 https://github.com/rstephan/ArtnetWifi
 */
+#if defined(ARDUINO_AVR_UNO_WIFI_REV2)
+#error "No C++11 support! Use a more powerful controller or the other 'ArtnetWifiDebug' example, sorry."
+#endif
 #include <ArtnetWifi.h>
 #include <Arduino.h>
 
@@ -74,7 +77,7 @@ void setup()
       tail = true;
     }
     // send out the buffer
-    for (int i = 0; i < length; i++) {
+    for (uint16_t i = 0; i < length; i++) {
       Serial.print(data[i], HEX);
       Serial.print(" ");
     }
