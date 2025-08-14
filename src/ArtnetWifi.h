@@ -44,6 +44,9 @@ THE SOFTWARE.
 #include <functional>
 #elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
 #include <WiFiNINA.h>
+#elif defined(ARDUINO_ARCH_AMEBAD)
+#include <WiFi.h>
+#include <functional>
 #else
 #error "Architecture not supported!"
 #endif
